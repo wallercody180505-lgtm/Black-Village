@@ -1,0 +1,11 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Temporary files
+*.tmp
+*.bak
+
+# Windows
+Thumbs.db
+Desktop.ini
