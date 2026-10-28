@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://c8ai112iy8bjg"]
+
+[ext_resource type="Script" uid="uid://6ob4pg2vky6m" path="res://Scripts/item_data.gd" id="1_2y35m"]
+
+[resource]
+script = ExtResource("1_2y35m")
+item_id = "gold_coin"
+item_name = "Gold Coin"
+description = "A common currency used throughout the realm."
+value = 1
+metadata/_custom_type_script = "uid://6ob4pg2vky6m"

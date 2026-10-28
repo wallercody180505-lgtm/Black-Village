@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="InventoryData" format=3 uid="uid://hd6btxqbiij5"]
+
+[ext_resource type="Script" uid="uid://6ob4pg2vky6m" path="res://Scripts/item_data.gd" id="1_e8df7"]
+[ext_resource type="Script" uid="uid://bp8hly5w6yc3x" path="res://Scripts/inventory_data.gd" id="1_tbb60"]
+[ext_resource type="Resource" uid="uid://c8ai112iy8bjg" path="res://Resources/Items/gold_coin.tres" id="2_dial7"]
+
+[resource]
+script = ExtResource("1_tbb60")
+inventory_name = "Player Inventory"
+items = Array[ExtResource("1_e8df7")]([ExtResource("2_dial7")])
+quantities = Array[int]([25])
+metadata/_custom_type_script = "uid://bp8hly5w6yc3x"
