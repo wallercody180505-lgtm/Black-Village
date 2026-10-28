@@ -3,7 +3,10 @@ extends CharacterBody3D
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const MOUSE_SENSITIVITY = 0.002
-const TURN_SPEED = 10.0
+const TURN_SPEED = 7.0
+const SPRINT_SPEED = 9.0
+const ACCELERATION = 12.0
+const DECELERATION = 16.0
 
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var camera_arm: SpringArm3D = $CameraPivot/CameraArm
@@ -37,9 +40,14 @@ func _physics_process(delta: float) -> void:
 	var direction := camera_pivot.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)
 	direction.y = 0
 	direction = direction.normalized()
+	var current_speed = SPEED
+	
+	if Input.is_action_pressed("sprint"):
+		current_speed = SPRINT_SPEED
+	
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		velocity.x = move_toward(velocity.x, direction.x * current_speed, ACCELERATION * delta)
+		velocity.z = move_toward(velocity.z, direction.z * current_speed, ACCELERATION * delta)
 		var target_angle = atan2(-direction.x, -direction.z)
 		player_mesh.rotation.y = lerp_angle(
 			player_mesh.rotation.y,
@@ -47,7 +55,7 @@ func _physics_process(delta: float) -> void:
 			TURN_SPEED * delta
 		)
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
-
+		velocity.x = move_toward(velocity.x, 0, DECELERATION * delta)
+		velocity.z = move_toward(velocity.z, 0, DECELERATION * delta)
+		
 	move_and_slide()
