@@ -10,7 +10,7 @@ const DECELERATION = 16.0
 
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var camera_arm: SpringArm3D = $CameraPivot/CameraArm
-@onready var player_mesh: MeshInstance3D = $PlayerMesh
+@onready var player_mesh: Node3D = $PlayerMesh/CharacterModel
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED

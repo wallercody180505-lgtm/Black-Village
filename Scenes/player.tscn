@@ -1,24 +1,16 @@
 [gd_scene format=3 uid="uid://bpys44bj0atqy"]
 
 [ext_resource type="Script" uid="uid://cqjqnay0ajs6t" path="res://Scripts/player.gd" id="1_v0iea"]
+[ext_resource type="PackedScene" uid="uid://crjohqoprcaqk" path="res://Assets/Characters/black_village_base_character.glb" id="2_cvnsp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dov0a"]
 radius = 0.4
 height = 1.8
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_clsjf"]
-radius = 0.4
-height = 1.8
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_clsjf"]
-albedo_color = Color(0.32156864, 0.47843137, 0.35686275, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dov0a"]
-albedo_color = Color(1, 0, 0, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_clsjf"]
-material = SubResource("StandardMaterial3D_dov0a")
-size = Vector3(0.2, 0.2, 0.2)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cvnsp"]
+resource_name = "Skin"
+albedo_color = Color(0.7882353, 0.5882353, 0.44705883, 1)
+roughness = 0.9
 
 [node name="Player" type="CharacterBody3D" unique_id=1056000506]
 script = ExtResource("1_v0iea")
@@ -29,12 +21,12 @@ shape = SubResource("CapsuleShape3D_dov0a")
 
 [node name="PlayerMesh" type="MeshInstance3D" parent="." unique_id=1334616305]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
-mesh = SubResource("CapsuleMesh_clsjf")
-surface_material_override/0 = SubResource("StandardMaterial3D_clsjf")
 
-[node name="Nose" type="MeshInstance3D" parent="PlayerMesh" unique_id=101392039]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -0.4)
-mesh = SubResource("BoxMesh_clsjf")
+[node name="CharacterModel" parent="PlayerMesh" unique_id=1578698929 instance=ExtResource("2_cvnsp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
+
+[node name="Torso" parent="PlayerMesh/CharacterModel/world" parent_id_path=PackedInt32Array(1578698929, 451746866) index="0" unique_id=1845101311]
+material_override = SubResource("StandardMaterial3D_cvnsp")
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=286548491]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 1.4, 0)
@@ -44,3 +36,5 @@ transform = Transform3D(1, 0, 0, 0, 0.96592575, 0.25881904, 0, -0.258819, 0.9659
 spring_length = 4.0
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/CameraArm" unique_id=1632827673]
+
+[editable path="PlayerMesh/CharacterModel"]
