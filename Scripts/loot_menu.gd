@@ -13,7 +13,7 @@ signal menu_closed
 @onready var chest_item_list: VBoxContainer = $LootPanel/MainLayout/InventoryColumns/ChestInventory/ChestItemList
 @onready var player_item_list: VBoxContainer = $LootPanel/MainLayout/InventoryColumns/PlayerInventory/PlayerItemList
 
-var selected_item: ItemData = null
+var selected_slot: int = -1
 
 
 func _ready() -> void:
@@ -27,7 +27,7 @@ func _ready() -> void:
 
 
 func open_menu() -> void:
-	selected_item = null
+	selected_slot = -1
 
 	refresh_inventory_display()
 
@@ -60,7 +60,12 @@ func refresh_inventory_display() -> void:
 	if player_inventory != null:
 		populate_player_items()
 
-	take_button.disabled = selected_item == null
+	take_button.disabled = (
+		chest_inventory == null
+		or selected_slot < 0
+		or selected_slot >= chest_inventory.items.size()
+	)
+
 	take_all_button.disabled = (
 		chest_inventory == null or chest_inventory.is_empty()
 	)
@@ -98,10 +103,10 @@ func populate_chest_items() -> void:
 		item_button.custom_minimum_size.y = 35
 		item_button.add_theme_font_size_override("font_size", 18)
 
-		if selected_item != null and selected_item.item_id == item.item_id:
+		if selected_slot == i:
 			item_button.text = "> " + item_button.text + " <"
 
-		item_button.pressed.connect(select_item.bind(item))
+		item_button.pressed.connect(select_item.bind(i))
 
 		chest_item_list.add_child(item_button)
 
@@ -135,25 +140,33 @@ func populate_player_items() -> void:
 		player_item_list.add_child(item_label)
 
 
-func select_item(item: ItemData) -> void:
-	selected_item = item
+func select_item(slot_index: int) -> void:
+	selected_slot = slot_index
 	refresh_inventory_display()
 
 
 func take_selected_item() -> void:
-	if selected_item == null:
-		return
-
 	if chest_inventory == null or player_inventory == null:
 		return
 
-	if chest_inventory.remove_item(selected_item, 1):
-		player_inventory.add_item(selected_item, 1)
+	if selected_slot < 0 or selected_slot >= chest_inventory.items.size():
+		return
 
-		print("Taken: ", selected_item.item_name)
+	if selected_slot >= chest_inventory.quantities.size():
+		return
 
-		if chest_inventory.get_item_quantity(selected_item) <= 0:
-			selected_item = null
+	var item: ItemData = chest_inventory.items[selected_slot]
+
+	if item == null:
+		return
+
+	if chest_inventory.remove_item(item, 1):
+		player_inventory.add_item(item, 1)
+
+		print("Taken: ", item.item_name)
+
+		# Clear selection because inventory slots may have shifted.
+		selected_slot = -1
 
 		refresh_inventory_display()
 
@@ -162,7 +175,6 @@ func take_all_items() -> void:
 	if chest_inventory == null or player_inventory == null:
 		return
 
-	# Copy the arrays so removing items doesn't affect our loop.
 	var items_to_transfer: Array[ItemData] = chest_inventory.items.duplicate()
 	var quantities_to_transfer: Array[int] = chest_inventory.quantities.duplicate()
 
@@ -179,7 +191,7 @@ func take_all_items() -> void:
 		if chest_inventory.remove_item(item, amount):
 			player_inventory.add_item(item, amount)
 
-	selected_item = null
+	selected_slot = -1
 
 	refresh_inventory_display()
 

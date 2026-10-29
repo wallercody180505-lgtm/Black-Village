@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cejsglnn33m1f"]
+
+[ext_resource type="Script" uid="uid://6ob4pg2vky6m" path="res://Scripts/item_data.gd" id="1_ihv7k"]
+
+[resource]
+script = ExtResource("1_ihv7k")
+item_id = "iron_ore"
+item_name = "Iron Ore"
+value = 8
+metadata/_custom_type_script = "uid://6ob4pg2vky6m"

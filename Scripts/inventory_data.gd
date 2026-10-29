@@ -20,8 +20,13 @@ func add_item(item: ItemData, amount: int = 1) -> void:
 				inventory_changed.emit()
 				return
 
-	items.append(item)
-	quantities.append(amount)
+		items.append(item)
+		quantities.append(amount)
+
+	else:
+		for i in range(amount):
+			items.append(item)
+			quantities.append(1)
 
 	inventory_changed.emit()
 
@@ -30,21 +35,32 @@ func remove_item(item: ItemData, amount: int = 1) -> bool:
 	if item == null or amount <= 0:
 		return false
 
-	for i in range(items.size()):
-		if items[i] != null and items[i].item_id == item.item_id:
-			if quantities[i] < amount:
-				return false
+	if get_item_quantity(item) < amount:
+		return false
 
-			quantities[i] -= amount
+	var remaining: int = amount
 
-			if quantities[i] <= 0:
-				items.remove_at(i)
-				quantities.remove_at(i)
+	for i in range(items.size() - 1, -1, -1):
+		if items[i] == null:
+			continue
 
-			inventory_changed.emit()
-			return true
+		if items[i].item_id != item.item_id:
+			continue
 
-	return false
+		var amount_to_remove: int = min(quantities[i], remaining)
+
+		quantities[i] -= amount_to_remove
+		remaining -= amount_to_remove
+
+		if quantities[i] <= 0:
+			items.remove_at(i)
+			quantities.remove_at(i)
+
+		if remaining <= 0:
+			break
+
+	inventory_changed.emit()
+	return true
 
 
 func get_item_quantity(item: ItemData) -> int:

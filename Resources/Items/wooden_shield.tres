@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://c4d4vrqrumdm2"]
+
+[ext_resource type="Script" uid="uid://6ob4pg2vky6m" path="res://Scripts/item_data.gd" id="1_ohln0"]
+
+[resource]
+script = ExtResource("1_ohln0")
+item_id = "wooden_shield"
+item_name = "Wooden Shield"
+value = 20
+stackable = false
+metadata/_custom_type_script = "uid://6ob4pg2vky6m"
