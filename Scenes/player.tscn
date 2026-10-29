@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dngs3x83b50y4" path="res://Scenes/loot_menu.tscn" id="9_f1ek2"]
 [ext_resource type="Resource" uid="uid://hd6btxqbiij5" path="res://Resources/Inventories/player_inventory.tres" id="10_gymyn"]
 [ext_resource type="Resource" uid="uid://dfyp8f0kunvh7" path="res://Resources/Inventories/wooden_chest_inventory.tres" id="11_pu2lt"]
+[ext_resource type="Script" uid="uid://cmyphil8mr0pq" path="res://Scripts/inventory_menu.gd" id="12_pu2lt"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dov0a"]
 radius = 0.4
@@ -1445,3 +1446,49 @@ horizontal_alignment = 1
 visible = false
 player_inventory = ExtResource("10_gymyn")
 chest_inventory = ExtResource("11_pu2lt")
+
+[node name="InventoryUI" type="CanvasLayer" parent="." unique_id=36077460]
+
+[node name="InventoryMenu" type="Control" parent="InventoryUI" unique_id=1233091812]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("12_pu2lt")
+player_inventory = ExtResource("10_gymyn")
+
+[node name="InventoryPanel" type="PanelContainer" parent="InventoryUI/InventoryMenu" unique_id=1895874231]
+custom_minimum_size = Vector2(500, 450)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -225.0
+offset_right = 250.0
+offset_bottom = 225.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainLayout" type="VBoxContainer" parent="InventoryUI/InventoryMenu/InventoryPanel" unique_id=1888037236]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="InventoryTitle" type="Label" parent="InventoryUI/InventoryMenu/InventoryPanel/MainLayout" unique_id=737118252]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "INVENTORY"
+horizontal_alignment = 1
+
+[node name="ItemList" type="VBoxContainer" parent="InventoryUI/InventoryMenu/InventoryPanel/MainLayout" unique_id=976949098]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CloseButton" type="Button" parent="InventoryUI/InventoryMenu/InventoryPanel/MainLayout" unique_id=1151734831]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Close"

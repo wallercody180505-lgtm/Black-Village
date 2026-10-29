@@ -16,6 +16,7 @@ const MOUSE_SENSITIVITY = 0.002
 @onready var interaction_ray: RayCast3D = $PlayerMesh/CharacterModel/InteractionRay
 @onready var interaction_prompt: Label = $InteractionUI/InteractionPrompt
 @onready var loot_menu: Control = $LootUI/LootMenu
+@onready var inventory_menu: Control = $InventoryUI/InventoryMenu
 
 var current_interactable: Node = null
 var connected_chests: Array[Node] = []
@@ -23,9 +24,11 @@ var connected_chests: Array[Node] = []
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
 	interaction_ray.add_exception(self)
 	interaction_prompt.hide()
 	loot_menu.hide()
+	inventory_menu.hide()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -38,6 +41,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			deg_to_rad(45)
 		)
 
+	if event is InputEventKey:
+		if event.pressed and not event.echo:
+			if event.keycode == KEY_I:
+				if not loot_menu.visible and not inventory_menu.visible:
+					open_inventory_menu()
+
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -47,11 +56,16 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 
 	var input_dir = Input.get_vector(
-		"move_left", "move_right", "move_forward", "move_backward"
+		"move_left",
+		"move_right",
+		"move_forward",
+        "move_backward"
 	)
 
 	var direction = camera_pivot.global_transform.basis * Vector3(
-		input_dir.x, 0, input_dir.y
+		input_dir.x,
+		0,
+		input_dir.y
 	)
 
 	direction.y = 0
@@ -113,6 +127,7 @@ func _physics_process(delta: float) -> void:
 
 func update_interaction() -> void:
 	interaction_ray.force_raycast_update()
+
 	current_interactable = null
 
 	if interaction_ray.is_colliding():
@@ -155,3 +170,9 @@ func open_loot_menu() -> void:
 	interaction_prompt.hide()
 	velocity = Vector3.ZERO
 	loot_menu.open_menu()
+
+
+func open_inventory_menu() -> void:
+	interaction_prompt.hide()
+	velocity = Vector3.ZERO
+	inventory_menu.open_menu()
